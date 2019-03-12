@@ -8,24 +8,25 @@ import (
 )
 
 const (
-	//NodeCut
+	//NodeCut indicates a node to have an operation of CUT
 	NodeCut = 'c'
-	//NodeStore
+	//NodeStore indicates a node to have an operation of STORE
 	NodeStore = 's'
 )
 
+//ErrAlreadyCut returned if CUT operation on a CUT node requested
 var ErrAlreadyCut = errors.New("node is already cut")
 
-//NodeType
+//NodeType indicates the type of AoNode
 type NodeType byte
 
-//CutSpecs
+//CutSpecs specifies details of the CUT operation on a node
 type CutSpecs struct {
 	Position int
 	Axis     types.Axis
 }
 
-//AoNode
+//AoNode encapsulated related information of a AND/OR tree node
 type AoNode struct {
 	Parent   *AoNode
 	Left     *AoNode
@@ -35,7 +36,7 @@ type AoNode struct {
 	NodeType NodeType
 }
 
-//NewAoNode
+//NewAoNode is the AoNode constructor. Used for creating the root node of a A/O-tree
 func NewAoNode(box entities.Box) *AoNode {
 	return &AoNode{
 		Parent:   nil,
@@ -46,14 +47,14 @@ func NewAoNode(box entities.Box) *AoNode {
 	}
 }
 
-//Uncut
+//Uncut reverts effects of a CUT operation
 func (n *AoNode) Uncut() {
 	n.NodeType = NodeStore
 	n.Left = nil
 	n.Right = nil
 }
 
-//Cut
+//Cut applies CUT operation on a node
 func (n *AoNode) Cut(position int, axis types.Axis) error {
 	if n.NodeType == NodeCut || (n.Left != nil && n.Right != nil) {
 		return ErrAlreadyCut
@@ -80,7 +81,7 @@ func (n *AoNode) Cut(position int, axis types.Axis) error {
 	return nil
 }
 
-//CalculateBox
+//CalculateBox calculates the node's bounding box from corresponding predecessors
 func (n *AoNode) CalculateBox() {
 	if n.Parent == nil {
 		return
@@ -118,7 +119,7 @@ func (n *AoNode) CalculateBox() {
 	}
 }
 
-//Root
+//Root finds root of the tree
 func (n *AoNode) Root() *AoNode {
 	node := n
 
@@ -129,7 +130,7 @@ func (n *AoNode) Root() *AoNode {
 	return node
 }
 
-//Traverse
+//Traverse extracts all nodes from the tree which allowed by the filter.
 func (n *AoNode) Traverse(filter func(node *AoNode) bool) []*AoNode {
 	queue := []*AoNode{n.Root()}
 	var visited []*AoNode
@@ -158,19 +159,19 @@ func (n *AoNode) Traverse(filter func(node *AoNode) bool) []*AoNode {
 	return visited
 }
 
-//All
+//All returns all nodes in the tree without a constraint
 func (n *AoNode) All() []*AoNode {
 	return n.Traverse(nil)
 }
 
-//StoreNodes
+//StoreNodes returns only STORE nodes from the tree.
 func (n *AoNode) StoreNodes() []*AoNode {
 	return n.Traverse(func(node *AoNode) bool {
 		return node.NodeType == NodeStore
 	})
 }
 
-//CutNodes
+//CutNodes returns only CUT nodes from the tree.
 func (n *AoNode) CutNodes() []*AoNode {
 	return n.Traverse(func(node *AoNode) bool {
 		return node.NodeType == NodeCut
