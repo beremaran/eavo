@@ -13,9 +13,7 @@ stages:
   - build
 
 before_script:
-  - mkdir -p /go/src/gitlab.com/beremaran /go/src/_/builds
   - cp -r $CI_PROJECT_DIR /go/src/gitlab.com/beremaran/eavo
-  - ln -s /go/src/gitlab.com/beremaran /go/src/_/builds/beremaran
   - export CC=clang-5.0
   - make dep
 
