@@ -10,6 +10,19 @@ type Box struct {
 	Position types.Vector3i
 }
 
+func (b *Box) GetAxisLength(axis types.Axis) int {
+	switch axis {
+	case types.AxisX:
+		return b.Size.X
+	case types.AxisY:
+		return b.Size.Y
+	case types.AxisZ:
+		return b.Size.Z
+	}
+
+	return -1
+}
+
 func (b *Box) Weight() int {
 	return b.Volume()
 }
