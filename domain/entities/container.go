@@ -12,6 +12,7 @@ func (c *Container) Volume() int {
 	return c.Size.X * c.Size.Y * c.Size.Z
 }
 
+//ToBox returns a Box with same size of Container
 func (c *Container) ToBox() Box {
 	return Box{Size: c.Size}
 }
