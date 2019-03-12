@@ -5,10 +5,12 @@ import (
 	"math/rand"
 )
 
+//TournamentSelector selects an individual implying Tournament Selection
 type TournamentSelector struct {
 	TournamentSize int
 }
 
+//Select selects from an individual from given population
 func (s *TournamentSelector) Select(population []*genetic.Individual) (*genetic.Individual, error) {
 	return s.tournament(population, 1)
 }
