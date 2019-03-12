@@ -1,10 +1,10 @@
 package aotree
 
 import (
-	"beremaran/eavo/domain/entities"
-	"beremaran/eavo/domain/types"
 	"errors"
 	"fmt"
+	"gitlab.com/beremaran/eavo/domain/entities"
+	"gitlab.com/beremaran/eavo/domain/types"
 )
 
 const (

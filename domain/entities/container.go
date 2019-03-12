@@ -1,6 +1,6 @@
 package entities
 
-import "beremaran/eavo/domain/types"
+import "gitlab.com/beremaran/eavo/domain/types"
 
 type Container struct {
 	Size types.Vector3i

@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"beremaran/eavo/domain/types"
+	"gitlab.com/beremaran/eavo/domain/types"
 	"testing"
 )
 

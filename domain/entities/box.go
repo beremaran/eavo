@@ -1,8 +1,8 @@
 package entities
 
 import (
-	"beremaran/eavo/domain/types"
 	"github.com/jinzhu/copier"
+	"gitlab.com/beremaran/eavo/domain/types"
 )
 
 type Box struct {
