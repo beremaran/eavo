@@ -113,3 +113,16 @@ func TestAoNode_StoreNodes(t *testing.T) {
 		t.Errorf("wrong number of store nodes in tree (%d != %d)", len(nodes), 6)
 	}
 }
+
+func TestAoNode_Uncut(t *testing.T) {
+	root := get3LevelTree()
+
+	root.Uncut()
+	if root.Left != nil || root.Right != nil {
+		t.Errorf("node still has children")
+	}
+
+	if root.NodeType != NodeStore {
+		t.Errorf("node has wrong type (%c != %c)", root.NodeType, NodeStore)
+	}
+}
