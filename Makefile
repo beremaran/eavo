@@ -1,5 +1,5 @@
-PROJECT_NAME := "eavo"
-PKG := "gitlab.com/beremaran/$(PROJECT_NAME)"
+PROJECT_NAME := "demo-tools"
+PKG := "gitlab.com/pantomath-io/$(PROJECT_NAME)"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 
@@ -7,32 +7,33 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 
 all: build
 
-lint:
-  @golint -set_exit_status ${PKG_LIST}
+lint: ## Lint the files
+	@golint -set_exit_status ${PKG_LIST}
 
-test:
-  @go test -short ${PKG_LIST}
+test: ## Run unittests
+	@go test -short ${PKG_LIST}
 
 race: dep ## Run data race detector
-  @go test -race -short ${PKG_LIST}
+	@go test -race -short ${PKG_LIST}
 
 msan: dep ## Run memory sanitizer
-  @go test -msan -short ${PKG_LIST}
+	@go test -msan -short ${PKG_LIST}
 
 coverage: ## Generate global code coverage report
-  ./tools/coverage.sh;
+	./tools/coverage.sh;
 
 coverhtml: ## Generate global code coverage report in HTML
-  ./tools/coverage.sh html;
+	./tools/coverage.sh html;
 
 dep: ## Get the dependencies
-  @go get -v -d github.com/jinzhu/copier
+	@go get -u github.com/jinzhu/copier
+	@go get -u github.com/golang/lint/golint
 
 build: dep ## Build the binary file
-  @go build -i -v $(PKG)
+	@go build -i -v $(PKG)
 
 clean: ## Remove previous build
-  @rm -f $(PROJECT_NAME)
+	@rm -f $(PROJECT_NAME)
 
 help: ## Display this help screen
-  @grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
