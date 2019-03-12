@@ -69,11 +69,13 @@ func (n *AoNode) Cut(position int, axis types.Axis) error {
 	n.NodeType = NodeCut
 
 	n.Left = &AoNode{
-		Parent: n,
+		Parent:   n,
+		NodeType: NodeStore,
 	}
 
 	n.Right = &AoNode{
-		Parent: n,
+		Parent:   n,
+		NodeType: NodeStore,
 	}
 
 	n.Left.CalculateBox()
