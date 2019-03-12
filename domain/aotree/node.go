@@ -144,15 +144,17 @@ func (n *AoNode) Traverse(filter func(node *AoNode) bool) []*AoNode {
 			continue
 		}
 
-		if node.Left != nil && (filter == nil || filter(node.Left)) {
+		if node.Left != nil {
 			queue = append(queue, node.Left)
 		}
 
-		if node.Right != nil && (filter == nil || filter(node.Right)) {
+		if node.Right != nil {
 			queue = append(queue, node.Right)
 		}
 
-		visited = append(visited, node)
+		if filter == nil || filter(node) {
+			visited = append(visited, node)
+		}
 	}
 
 	return visited
