@@ -1,5 +1,5 @@
-PROJECT_NAME := "demo-tools"
-PKG := "gitlab.com/pantomath-io/$(PROJECT_NAME)"
+PROJECT_NAME := "eavo"
+PKG := "gitlab.com/beremaran/$(PROJECT_NAME)"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 
