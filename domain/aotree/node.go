@@ -78,7 +78,7 @@ func (n *AoNode) CalculateBox() {
 	}
 
 	cutSpecs := n.Parent.CutSpecs
-	n.Box = n.Parent.Box.Clone()
+	n.Box = *n.Parent.Box.Clone()
 	if n.Parent.Left == n {
 		switch cutSpecs.Axis {
 		case types.AxisX:
