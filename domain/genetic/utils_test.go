@@ -10,4 +10,9 @@ func TestContainsIndividual(t *testing.T) {
 	if !doesContain {
 		t.Errorf("individual not found")
 	}
+
+	doesContain = ContainsIndividual([]*Individual{}, toSearch)
+	if doesContain {
+		t.Errorf("individual found in empty slice")
+	}
 }
