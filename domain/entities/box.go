@@ -5,11 +5,13 @@ import (
 	"gitlab.com/beremaran/eavo/domain/types"
 )
 
+//Box
 type Box struct {
 	Size     types.Vector3i
 	Position types.Vector3i
 }
 
+//GetAxisLength
 func (b *Box) GetAxisLength(axis types.Axis) int {
 	switch axis {
 	case types.AxisX:
@@ -23,14 +25,17 @@ func (b *Box) GetAxisLength(axis types.Axis) int {
 	return -1
 }
 
+//Weight
 func (b *Box) Weight() int {
 	return b.Volume()
 }
 
+//Volume
 func (b *Box) Volume() int {
 	return b.Size.X * b.Size.Y * b.Size.Z
 }
 
+//Clone
 func (b *Box) Clone() *Box {
 	box := &Box{}
 	err := copier.Copy(box, b)

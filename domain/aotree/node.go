@@ -8,19 +8,24 @@ import (
 )
 
 const (
-	NodeCut   = 'c'
+	//NodeCut
+	NodeCut = 'c'
+	//NodeStore
 	NodeStore = 's'
 )
 
-var AlreadyCutError = errors.New("node is already cut")
+var ErrAlreadyCut = errors.New("node is already cut")
 
+//NodeType
 type NodeType byte
 
+//CutSpecs
 type CutSpecs struct {
 	Position int
 	Axis     types.Axis
 }
 
+//AoNode
 type AoNode struct {
 	Parent   *AoNode
 	Left     *AoNode
@@ -30,6 +35,7 @@ type AoNode struct {
 	NodeType NodeType
 }
 
+//NewAoNode
 func NewAoNode(box entities.Box) *AoNode {
 	return &AoNode{
 		Parent:   nil,
@@ -40,15 +46,17 @@ func NewAoNode(box entities.Box) *AoNode {
 	}
 }
 
+//Uncut
 func (n *AoNode) Uncut() {
 	n.NodeType = NodeStore
 	n.Left = nil
 	n.Right = nil
 }
 
+//Cut
 func (n *AoNode) Cut(position int, axis types.Axis) error {
 	if n.NodeType == NodeCut || (n.Left != nil && n.Right != nil) {
-		return AlreadyCutError
+		return ErrAlreadyCut
 	}
 
 	if position <= 0 || position >= n.Box.GetAxisLength(axis) {
@@ -72,6 +80,7 @@ func (n *AoNode) Cut(position int, axis types.Axis) error {
 	return nil
 }
 
+//CalculateBox
 func (n *AoNode) CalculateBox() {
 	if n.Parent == nil {
 		return
@@ -109,6 +118,7 @@ func (n *AoNode) CalculateBox() {
 	}
 }
 
+//Root
 func (n *AoNode) Root() *AoNode {
 	node := n
 
@@ -119,6 +129,7 @@ func (n *AoNode) Root() *AoNode {
 	return node
 }
 
+//Traverse
 func (n *AoNode) Traverse(filter func(node *AoNode) bool) []*AoNode {
 	queue := []*AoNode{n.Root()}
 	var visited []*AoNode
@@ -147,16 +158,19 @@ func (n *AoNode) Traverse(filter func(node *AoNode) bool) []*AoNode {
 	return visited
 }
 
+//All
 func (n *AoNode) All() []*AoNode {
 	return n.Traverse(nil)
 }
 
+//StoreNodes
 func (n *AoNode) StoreNodes() []*AoNode {
 	return n.Traverse(func(node *AoNode) bool {
 		return node.NodeType == NodeStore
 	})
 }
 
+//CutNodes
 func (n *AoNode) CutNodes() []*AoNode {
 	return n.Traverse(func(node *AoNode) bool {
 		return node.NodeType == NodeCut
