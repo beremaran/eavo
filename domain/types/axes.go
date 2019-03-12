@@ -1,13 +1,13 @@
 package types
 
-//Axis
+//Axis is used for representing values for x, y, z axes.
 type Axis byte
 
 const (
-	//AxisX
+	//AxisX represents X axis
 	AxisX = 'x'
-	//AxisY
+	//AxisY represents Y axis
 	AxisY = 'y'
-	//AxisZ
+	//AxisZ represents Z axis
 	AxisZ = 'z'
 )
