@@ -11,3 +11,7 @@ type Container struct {
 func (c *Container) Volume() int {
 	return c.Size.X * c.Size.Y * c.Size.Z
 }
+
+func (c *Container) ToBox() Box {
+	return Box{Size: c.Size}
+}
