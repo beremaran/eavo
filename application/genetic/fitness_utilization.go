@@ -1,8 +1,6 @@
 package genetic
 
 import (
-	"gitlab.com/beremaran/eavo/domain/aotree"
-	"gitlab.com/beremaran/eavo/domain/entities"
 	"gitlab.com/beremaran/eavo/domain/genetic"
 )
 
@@ -28,33 +26,10 @@ func (f *UtilizationFitness) Calculate(individual *genetic.Individual) (float64,
 	containerVolume := float64(f.context.Problem.Container.Volume())
 	totalBoxVolume := 0.0
 
-	problemBoxes := f.context.Problem.Boxes
-	nodeMap := map[*entities.Box]*aotree.AoNode{}
-	storeNodes := individual.Genome.Root().StoreNodes()
-	for i := 0; i < len(storeNodes); i++ {
-		node := storeNodes[i]
-
-		for j := 0; j < len(problemBoxes); j++ {
-			pBox := problemBoxes[j]
-			if containsBoxKey(nodeMap, &pBox) {
-				continue
-			}
-
-			if pBox.Fits(&node.Box) {
-				nodeMap[&pBox] = node
-				break
-			}
-		}
-	}
-
+	nodeMap := FindUsedBoxes(individual.Genome, f.context.Problem)
 	for pBox := range nodeMap {
 		totalBoxVolume += float64(pBox.Volume())
 	}
 
 	return totalBoxVolume / containerVolume, nil
-}
-
-func containsBoxKey(m map[*entities.Box]*aotree.AoNode, b *entities.Box) bool {
-	_, ok := m[b]
-	return ok
 }
