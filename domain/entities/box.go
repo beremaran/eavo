@@ -45,3 +45,48 @@ func (b *Box) Clone() *Box {
 
 	return box
 }
+
+//Fits returns true if box fits into given box
+func (b *Box) Fits(o *Box) bool {
+	rotations := []*Box{
+		b,
+		b.Rotate(types.AxisX),
+		b.Rotate(types.AxisY),
+		b.Rotate(types.AxisZ),
+	}
+
+	for i := 0; i < len(rotations); i++ {
+		r := rotations[i]
+
+		if r.Size.X <= o.Size.X &&
+			r.Size.Y <= o.Size.Y &&
+			r.Size.Z <= o.Size.Z {
+			return true
+		}
+	}
+
+	return false
+}
+
+//Rotate returns rotated version of Box
+func (b *Box) Rotate(axis types.Axis) *Box {
+	rotated := &Box{}
+	err := copier.Copy(rotated, b)
+	if err != nil {
+		panic(err)
+	}
+
+	switch axis {
+	case types.AxisX:
+		rotated.Size.Y, rotated.Size.Z = rotated.Size.Z, rotated.Size.Y
+		break
+	case types.AxisY:
+		rotated.Size.X, rotated.Size.Z = rotated.Size.Z, rotated.Size.X
+		break
+	case types.AxisZ:
+		rotated.Size.X, rotated.Size.Y = rotated.Size.Y, rotated.Size.X
+		break
+	}
+
+	return rotated
+}
